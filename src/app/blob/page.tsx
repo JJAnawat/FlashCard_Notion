@@ -1,13 +1,10 @@
-import Link from "next/link";
+import FlashCard from "../_components/flashCard";
 
-import { api, HydrateClient } from "~/trpc/server";
-
-export default async function Home() {
-  return (
-    <HydrateClient>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-dark-gray">
-        <div className="w-20 h-20 bg-black"></div>
+export default function Home() {
+  return ( // TODO fetching notion data and somehow split it to each flash card
+      <main className="flex min-h-screen relative items-center justify-center bg-dark-gray">
+        <FlashCard />
+        <div className="absolute bottom-10">Button</div>
       </main>
-    </HydrateClient>
   );
 }

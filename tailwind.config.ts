@@ -7,6 +7,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        poppins: ['Poppins', ...fontFamily.sans]
       },
       colors: {
         'dark-gray': '#222831',

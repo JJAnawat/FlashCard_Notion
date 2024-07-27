@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Summary() {
-  const [topMissedWords, setTopMissedWords] = useState<[[string, number]] | null>(null);
+  const [topMissedWords, setTopMissedWords] = useState<[string, number][] | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
 
   useEffect(() => {
@@ -24,8 +24,8 @@ export default function Summary() {
     sortable.sort(function(a, b){
       return b[1] - a[1];
     });
-    console.log(sortable);
-    setTopMissedWords(sortable);
+    // console.log(sortable);
+    setTopMissedWords(sortable.slice(0,5) as [string,number][]);
   }, []);
 
   return ( // TODO add summary page for details look in notion na

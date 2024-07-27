@@ -13,6 +13,8 @@ export default {
         'dark-gray': '#222831',
         'light-gray': '#31363F',
         'light-cyan': '#76ABAE',
+        'light-green': '#76ae83',
+        'light-red': '#ae7676',
         'grayish-white': '#EEEEEE'
       }
     },

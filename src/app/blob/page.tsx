@@ -7,6 +7,7 @@ import { FlashCardData } from "~/interface";
 
 import { api } from "~/trpc/react";
 import { STATUS, STATUS_PROB } from "~/const";
+import Link from "next/link";
 
 export default function Home() {
   const { data, isLoading, isSuccess } = api.word.getAllWords.useQuery();
@@ -14,10 +15,12 @@ export default function Home() {
   const [idx, setIdx] = useState<number>(0);
   
   useEffect(() => {
+    localStorage.clear();
+    localStorage.setItem('startTime', Date.now().toString());
     if (data && isSuccess) {
       let ret = [];
       for (const item of data) {
-        // console.log(item);
+        // Add all item list
         const statusIdx = STATUS.indexOf(item.properties.status);
         let prob = STATUS_PROB[statusIdx];
         if (prob === undefined) prob = 0;
@@ -25,18 +28,25 @@ export default function Home() {
           ret.push(item);
         }
       }
-      // console.log(ret);
       setItems(ret);
     }
   }, [data, isSuccess]);
 
-  const handleNextButton = () => {
+  const handleMiss = () => {
+    const word = items[idx]?.properties.word;
+    if (word) {
+      const missCounts = JSON.parse(localStorage.getItem("missCounts") || "{}");
+      missCounts[word] = (missCounts[word] || 0) + 1;
+      localStorage.setItem("missCounts", JSON.stringify(missCounts));
+    }
+    nextIndex();
+  };
+
+  const nextIndex = () => {
     let newIdx = Math.floor(Math.random() * items.length);
     while(items[idx]?.properties.word === items[newIdx]?.properties.word){
       newIdx = Math.floor(Math.random() * items.length);
     }
-    console.log(items[idx]?.properties.word,items[newIdx]?.properties.word);
-
     setIdx(newIdx);
   };
 
@@ -51,7 +61,11 @@ export default function Home() {
         { isSuccess && items.length != 0 &&
         <>
           <FlashCard data={items[idx]}/>
-          <button className="absolute bottom-12 font-bold text-sm md:text-lg text-light-cyan bg-light-gray px-4 py-2 rounded-xl hover:scale-95 transition active:bg-opacity-50" onClick={handleNextButton}>Next word</button>
+          <div className="absolute bottom-12 flex gap-4">
+            <button className="font-bold text-sm md:text-lg text-light-red bg-light-gray px-4 py-2 rounded-xl hover:scale-95 transition active:bg-opacity-50 shadow-xl" onClick={handleMiss}>Skip</button>
+            <button className="font-bold text-sm md:text-lg text-light-green bg-light-gray px-4 py-2 rounded-xl hover:scale-95 transition active:bg-opacity-50 shadow-xl" onClick={nextIndex}>Next word</button>
+          </div>
+          <Link href='/summary' className="absolute top-5 right-7 font-bold text-2xl opacity-70 text-light-cyan">X</Link>
         </>
         }
         

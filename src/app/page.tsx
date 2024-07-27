@@ -12,7 +12,7 @@ export default async function Home() {
             Flash Card !!
           </h1>
           <Link href="/blob">
-            <button className="text-2xl font-bold text-grayish-white bg-light-gray px-12 py-5 rounded-full hover:scale-95 transition">Start</button>
+            <button className="text-2xl font-bold text-grayish-white bg-light-gray px-12 py-5 rounded-full hover:scale-95 transition active:bg-opacity-50">Start</button>
           </Link>
         </div>
       </main>

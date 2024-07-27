@@ -17,7 +17,7 @@ export const wordRouter = createTRPCRouter({
         },
       ],
     });
-
+    // console.log(response.results.filter(isFullPage)[0]?.properties.Status);
     const res = response.results
       .filter(isFullPage)
       .map((item: PageObjectResponse) => ({
@@ -26,7 +26,7 @@ export const wordRouter = createTRPCRouter({
           example: item.properties.Example?.type === 'rich_text' ? item.properties.Example.rich_text[0]?.plain_text ?? "" : "",
           meaning: item.properties.Meaning?.type === 'rich_text' ? item.properties.Meaning.rich_text[0]?.plain_text ?? "" : "",
           select: item.properties.Select?.type === 'multi_select' ? item.properties.Select.multi_select.map((selectItem) => selectItem.name) ?? [] : [],
-          status: item.properties.Status?.type === 'select' ? item.properties.Status.select?.name ?? "" : "",
+          status: item.properties.Status?.type === 'status' ? item.properties.Status.status?.name ?? "" : "",
           word: item.properties.Word?.type === 'title' ? item.properties.Word.title[0]?.plain_text ?? "" : "",
         },
       }));

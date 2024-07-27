@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, Factory } from "react";
+import { useState, useEffect } from "react";
 import FlashCard from "../_components/flashCard";
 
-import { FlashCardData } from "~/interface";
+import type { FlashCardData,MissCountsType } from "~/interface";
 
 import { api } from "~/trpc/react";
 import { STATUS, STATUS_PROB } from "~/const";
@@ -18,16 +18,19 @@ export default function Home() {
     localStorage.clear();
     localStorage.setItem('startTime', Date.now().toString());
     if (data && isSuccess) {
-      let ret = [];
+      const ret = [];
       for (const item of data) {
         // Add all item list
+        // console.log(item);
         const statusIdx = STATUS.indexOf(item.properties.status);
         let prob = STATUS_PROB[statusIdx];
+        // console.log(statusIdx, prob)
         if (prob === undefined) prob = 0;
         for (let i = 0; i < prob; i++) {
           ret.push(item);
         }
       }
+      // console.log(ret);
       setItems(ret);
     }
   }, [data, isSuccess]);
@@ -35,8 +38,9 @@ export default function Home() {
   const handleMiss = () => {
     const word = items[idx]?.properties.word;
     if (word) {
-      const missCounts = JSON.parse(localStorage.getItem("missCounts") || "{}");
-      missCounts[word] = (missCounts[word] || 0) + 1;
+      const storedMissCounts = localStorage.getItem("missCounts");
+      const missCounts: MissCountsType = storedMissCounts ? JSON.parse(storedMissCounts) : {};
+      missCounts[word] = (missCounts[word] ?? 0) + 1;
       localStorage.setItem("missCounts", JSON.stringify(missCounts));
     }
     nextIndex();
@@ -57,7 +61,6 @@ export default function Home() {
           <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading.</span>
         </div>
         }
-
         { isSuccess && items.length != 0 &&
         <>
           <FlashCard data={items[idx]}/>

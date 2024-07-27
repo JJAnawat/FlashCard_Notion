@@ -3,29 +3,35 @@
 import Link from "next/link";
 
 import { useState, useEffect } from "react";
+import { MissCountsType } from "~/interface";
 
 export default function Summary() {
   const [topMissedWords, setTopMissedWords] = useState<[string, number][] | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
 
   useEffect(() => {
-    const startTime = parseInt(localStorage.getItem("startTime") || "0", 10);
+    const startTime = parseInt(localStorage.getItem("startTime") ?? "0", 10);
     const endTime = Date.now();
     if (startTime) {
       const durationInMs = endTime - startTime;
       setDuration(Math.floor(durationInMs/1000));
     }
 
-    const missCounts = JSON.parse(localStorage.getItem("missCounts") || "{}");
-    let sortable = [];
-    for (let item in missCounts) {
-      sortable.push([item, missCounts[item]]);
+    const storedMissCounts = localStorage.getItem("missCounts");
+    const missCounts: MissCountsType = storedMissCounts ? JSON.parse(storedMissCounts) : {};
+    const keySorted = Object.keys(missCounts).sort(function (a,b){
+      const countA = missCounts[a] ?? 0;
+      const countB = missCounts[b] ?? 0;
+      return countB - countA;
+    })
+    const ret = [];
+    for(let i=0;i<Math.min(5,keySorted.length);i++){
+      const key = keySorted[i];
+      if(key !== undefined && key in missCounts)
+        ret.push([key,missCounts[key]]);
     }
-    sortable.sort(function(a, b){
-      return b[1] - a[1];
-    });
-    // console.log(sortable);
-    setTopMissedWords(sortable.slice(0,5) as [string,number][]);
+    console.log(keySorted);
+    setTopMissedWords(ret.slice(0,5) as [string,number][]);
   }, []);
 
   return ( // TODO add summary page for details look in notion na
@@ -41,7 +47,7 @@ export default function Summary() {
             } 
           </h2>
           <h2 className="font-bold text-base md:text-lg">Most miss words</h2>
-          {(!topMissedWords || topMissedWords.length == 0) && <div>You don't miss any word !!</div>}
+          {(!topMissedWords || topMissedWords.length == 0) && <div>You don&apos;t miss any word !!</div>}
           {topMissedWords?.map((item)=>{
             return <div key={item[0]} className="text-sm md:text-base">{`${item[0]} : ${item[1]}`}</div>
           })}

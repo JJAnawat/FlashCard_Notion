@@ -10,3 +10,5 @@ export interface FlashCardData {
     id: string;
     properties: FlashCardProperties
 }
+
+export type MissCountsType = Record<string,number>;

@@ -39,7 +39,7 @@ export default function Home() {
     const word = items[idx]?.properties.word;
     if (word) {
       const storedMissCounts = localStorage.getItem("missCounts");
-      const missCounts: MissCountsType = storedMissCounts ? JSON.parse(storedMissCounts) : {};
+      const missCounts: MissCountsType = storedMissCounts ? (JSON.parse(storedMissCounts) as MissCountsType) : {};
       missCounts[word] = (missCounts[word] ?? 0) + 1;
       localStorage.setItem("missCounts", JSON.stringify(missCounts));
     }

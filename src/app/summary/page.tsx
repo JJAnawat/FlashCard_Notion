@@ -18,7 +18,7 @@ export default function Summary() {
     }
 
     const storedMissCounts = localStorage.getItem("missCounts");
-    const missCounts: MissCountsType = storedMissCounts ? JSON.parse(storedMissCounts) : {};
+    const missCounts: MissCountsType = storedMissCounts ? (JSON.parse(storedMissCounts) as MissCountsType) : {};
     const keySorted = Object.keys(missCounts).sort(function (a,b){
       const countA = missCounts[a] ?? 0;
       const countB = missCounts[b] ?? 0;

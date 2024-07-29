@@ -32,6 +32,7 @@ export default function Home() {
       }
       // console.log(ret);
       setItems(ret);
+      setIdx(Math.floor(Math.random()*ret.length));
     }
   }, [data, isSuccess]);
 

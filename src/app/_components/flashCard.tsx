@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { FlashCardData } from "~/interface";
 
 export default function FlashCard({data} : {data:FlashCardData | undefined}){
     const [frontSide, setFrontSide] = useState<boolean>(true);
+
+    useEffect(()=>{
+        setFrontSide(true);
+    },[data]);
 
     const selectItems = data?.properties.select?.map((item) => " " + item.toLowerCase()) ?? [];
 

@@ -1,7 +1,7 @@
 export interface FlashCardProperties {
     example: string;
     meaning: string;
-    select: string[];
+    pos: string;
     status: string;
     word: string;
 }

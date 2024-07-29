@@ -25,7 +25,7 @@ export const wordRouter = createTRPCRouter({
         properties: {
           example: item.properties.Example?.type === 'rich_text' ? item.properties.Example.rich_text[0]?.plain_text ?? "" : "",
           meaning: item.properties.Meaning?.type === 'rich_text' ? item.properties.Meaning.rich_text[0]?.plain_text ?? "" : "",
-          select: item.properties.Select?.type === 'multi_select' ? item.properties.Select.multi_select.map((selectItem) => selectItem.name) ?? [] : [],
+          pos: item.properties.PoS?.type === 'select' ? item.properties.PoS.select?.name ?? "" : "",
           status: item.properties.Status?.type === 'status' ? item.properties.Status.status?.name ?? "" : "",
           word: item.properties.Word?.type === 'title' ? item.properties.Word.title[0]?.plain_text ?? "" : "",
         },

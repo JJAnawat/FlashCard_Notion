@@ -34,7 +34,7 @@ export default function Summary() {
     setTopMissedWords(ret.slice(0,5) as [string,number][]);
   }, []);
 
-  return ( // TODO add summary page for details look in notion na
+  return (
       <main className="flex flex-col min-h-screen items-center justify-center bg-dark-gray text-grayish-white">
         <div className="h-96 w-72 md:w-[28rem] px-10 py-10 bg-light-gray rounded-xl flex flex-col gap-2 shadow-xl">
           <h1 className="font-bold text-lg md:text-2xl text-light-cyan">Summary</h1>
@@ -47,7 +47,7 @@ export default function Summary() {
             } 
           </h2>
           <h2 className="font-bold text-base md:text-lg">Most miss words</h2>
-          {(!topMissedWords || topMissedWords.length == 0) && <div>You don&apos;t miss any word !!</div>}
+          {(!topMissedWords || topMissedWords.length == 0) && <div>You didn&apos;t miss any word !!</div>}
           {topMissedWords?.map((item)=>{
             return <div key={item[0]} className="text-sm md:text-base">{`${item[0]} : ${item[1]}`}</div>
           })}

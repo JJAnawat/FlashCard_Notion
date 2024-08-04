@@ -42,8 +42,7 @@ export default function Summary() {
       try{
         await scoreMutation.mutateAsync(scoreCounts);
       } catch ( error ){
-        // console.error("This is error");
-        console.error(error);
+        console.error("Error updating scores:", error);
       } finally {
         console.log("Done updating");
       }

@@ -41,15 +41,19 @@ export const wordRouter = createTRPCRouter({
       const results = [];
 
       for (const [pageId, score] of Object.entries(input)) {
-        const response = await notion.pages.update({
-          page_id: pageId,
-          properties: {
-            Score: {
-              number: score,
+        try {
+          const response = await notion.pages.update({
+            page_id: pageId,
+            properties: {
+              Score: {
+                number: score,
+              },
             },
-          },
-        });
-        results.push(response);
+          });
+          results.push(response);
+        } catch (error) {
+          console.error(`Failed to update page ${pageId}:`, error);
+        }
         
         await sleep(100);
       }

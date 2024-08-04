@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { useState, useEffect } from "react";
-import { MissCountsType, ScoreCountsType } from "~/interface";
+import type { MissCountsType, ScoreCountsType } from "~/interface";
 
 import { api } from "~/trpc/react";
 

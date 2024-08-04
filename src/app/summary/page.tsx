@@ -3,11 +3,14 @@
 import Link from "next/link";
 
 import { useState, useEffect } from "react";
-import { MissCountsType } from "~/interface";
+import { MissCountsType, ScoreCountsType } from "~/interface";
+
+import { api } from "~/trpc/react";
 
 export default function Summary() {
   const [topMissedWords, setTopMissedWords] = useState<[string, number][] | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
+  const scoreMutation = api.word.changeScore.useMutation();
 
   useEffect(() => {
     const startTime = parseInt(localStorage.getItem("startTime") ?? "0", 10);
@@ -32,6 +35,12 @@ export default function Summary() {
     }
     console.log(keySorted);
     setTopMissedWords(ret.slice(0,5) as [string,number][]);
+
+    const storedScoreCounts = localStorage.getItem("scoreCounts");
+    const scoreCounts: ScoreCountsType = storedScoreCounts ? (JSON.parse(storedScoreCounts) as ScoreCountsType) : {};
+    for (const [pageId, score] of Object.entries(scoreCounts)) {
+      scoreMutation.mutate({pageId: pageId, newScore: score});
+    }
   }, []);
 
   return (

@@ -4,6 +4,7 @@ export interface FlashCardProperties {
     pos: string;
     status: string;
     word: string;
+    score: number;
 }
 
 export interface FlashCardData {
@@ -12,3 +13,5 @@ export interface FlashCardData {
 }
 
 export type MissCountsType = Record<string,number>;
+
+export type ScoreCountsType = Record<string,number>;

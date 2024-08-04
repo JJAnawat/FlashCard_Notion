@@ -20,9 +20,9 @@ const HighlightedText: React.FC<HighlightProps> = ({ word, sentence }) => {
   };
 
   if(word == undefined || sentence == undefined)
-    return <p>Loading</p>
+    return <span>Loading</span>
 
-  return <p>{highlightWord(sentence, word)}</p>;
+  return <span>{highlightWord(sentence, word)}</span>;
 };
 
 export default HighlightedText;

@@ -44,6 +44,8 @@ export default function Summary() {
       } catch ( error ){
         // console.error("This is error");
         console.error(error);
+      } finally {
+        console.log("Done updating");
       }
     }
 

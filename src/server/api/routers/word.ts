@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { databaseId, STATUS } from "~/const";
+import { databaseId } from "~/const";
 import { Client, isFullPage } from "@notionhq/client";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 

@@ -36,14 +36,28 @@ export default function Summary() {
     // console.log(keySorted);
     setTopMissedWords(ret.slice(0,5) as [string,number][]);
 
-    const updateScores = async () => {
+    const updateScores = () => {
       const storedScoreCounts = localStorage.getItem("scoreCounts");
       const scoreCounts: ScoreCountsType = storedScoreCounts ? (JSON.parse(storedScoreCounts) as ScoreCountsType) : {};
-      await scoreMutation.mutateAsync(scoreCounts).catch(err=>
-        console.error("Error updating scores:", err)
-      ).then(()=>
-        console.log("This will be succeed")
-      )
+      
+      const storedInitialScoreCounts = localStorage.getItem("initialScores");
+      const initialScoreCounts: ScoreCountsType = storedInitialScoreCounts ? (JSON.parse(storedInitialScoreCounts) as ScoreCountsType) : {};
+
+      for (const pageId in initialScoreCounts) {
+        if (initialScoreCounts.hasOwnProperty(pageId)) {
+          if (initialScoreCounts[pageId] === scoreCounts[pageId]) {
+            // console.log(`PageId : ${pageId} Init : ${initialScoreCounts[pageId]}, After : ${scoreCounts[pageId]}`);
+            // console.log("This is equal");
+            delete scoreCounts[pageId];
+          }
+        }
+      }
+
+      // console.log("Updated scoreCounts:", scoreCounts);
+      if(Object.keys(scoreCounts).length != 0)
+        scoreMutation.mutate(scoreCounts);
+      else
+        console.log("There is no change in score");
     }
 
     updateScores();

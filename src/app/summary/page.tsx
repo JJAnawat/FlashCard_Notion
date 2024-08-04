@@ -39,13 +39,11 @@ export default function Summary() {
     const updateScores = async () => {
       const storedScoreCounts = localStorage.getItem("scoreCounts");
       const scoreCounts: ScoreCountsType = storedScoreCounts ? (JSON.parse(storedScoreCounts) as ScoreCountsType) : {};
-      try{
-        await scoreMutation.mutateAsync(scoreCounts);
-      } catch ( error ){
-        console.error("Error updating scores:", error);
-      } finally {
-        console.log("Done updating");
-      }
+      await scoreMutation.mutateAsync(scoreCounts).catch(err=>
+        console.error("Error updating scores:", err)
+      ).then(()=>
+        console.log("This will be succeed")
+      )
     }
 
     updateScores();

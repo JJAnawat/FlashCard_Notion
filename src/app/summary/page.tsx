@@ -33,14 +33,22 @@ export default function Summary() {
       if(key !== undefined && key in missCounts)
         ret.push([key,missCounts[key]]);
     }
-    console.log(keySorted);
+    // console.log(keySorted);
     setTopMissedWords(ret.slice(0,5) as [string,number][]);
 
-    const storedScoreCounts = localStorage.getItem("scoreCounts");
-    const scoreCounts: ScoreCountsType = storedScoreCounts ? (JSON.parse(storedScoreCounts) as ScoreCountsType) : {};
-    for (const [pageId, score] of Object.entries(scoreCounts)) {
-      scoreMutation.mutate({pageId: pageId, newScore: score});
+    const updateScores = async () => {
+      const storedScoreCounts = localStorage.getItem("scoreCounts");
+      const scoreCounts: ScoreCountsType = storedScoreCounts ? (JSON.parse(storedScoreCounts) as ScoreCountsType) : {};
+      try{
+        await scoreMutation.mutateAsync(scoreCounts);
+      } catch ( error ){
+        // console.error("This is error");
+        console.error(error);
+      }
     }
+
+    updateScores();
+
   }, []);
 
   return (

@@ -37,7 +37,7 @@ export default function Home() {
       setItems(ret);
       setIdx(Math.floor(Math.random()*ret.length));
       localStorage.setItem("scoreCounts", JSON.stringify(scoreCount));
-      console.log("Return to blob");
+      // console.log("Return to blob");
     }
   }, [data, isSuccess]);
 

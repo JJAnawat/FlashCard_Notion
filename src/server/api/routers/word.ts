@@ -6,6 +6,8 @@ import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const wordRouter = createTRPCRouter({
   getAllWords: publicProcedure.query(async () => {
     const response = await notion.databases.query({
@@ -34,29 +36,24 @@ export const wordRouter = createTRPCRouter({
     return res;
   }),
   changeScore: publicProcedure
-    .input(z.object({ pageId: z.string(), newScore: z.number().gte(0).lte(10) }))
+    .input(z.record( z.string(), z.number().gte(0).lte(10) ))
     .mutation(async ({ input }) => {
-      let newStatusIdx = Math.floor(input.newScore/2);
-      if(newStatusIdx == 5)
-        newStatusIdx = 4;
-      const newStatus = STATUS[newStatusIdx];
-      if(newStatus === undefined){
-        throw new Error("Invalid new status");
-      }
+      const results = [];
 
-      const response = await notion.pages.update({
-        page_id: input.pageId,
-        properties: {
-          Status: {
-            status: {
-              name: newStatus,
+      for (const [pageId, score] of Object.entries(input)) {
+        const response = await notion.pages.update({
+          page_id: pageId,
+          properties: {
+            Score: {
+              number: score,
             },
           },
-          Score: {
-            number: input.newScore
-          }
-        },
-      });
-      console.log(response);
+        });
+        results.push(response);
+        
+        await sleep(100);
+      }
+
+      return { message: "Scores updated successfully", results };
     }),
 });
